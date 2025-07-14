@@ -1,0 +1,94 @@
+productos = {'8475HD': ['HP', 15.6, '8GB', 'DD', '1T', 'Intel Core i5', 'Nvidia GTX1050'],
+             '2175HD': ['lenovo', 14, '4GB', 'SSD', '512GB', 'Intel Core i5', 'Nvidia GTX1050'],
+             'JjfFHD': ['Asus', 14, '16GB', 'SSD', '256GB', 'Intel Core i7', 'Nvidia RTX2080Ti'],
+             'fgdxFHD': ['HP', 15.6, '8GB', 'DD', '1T', 'Intel Core i3', 'integrada'],
+             'GF75HD': ['Asus', 15.6, '8GB', 'DD', '1T', 'Intel Core i7', 'Nvidia GTX1050'],
+             '123FHD': ['lenovo', 14, '6GB', 'DD', '1T', 'AMD Ryzen 5', 'integrada'],
+             '342FHD': ['lenovo', 15.6, '8GB', 'DD', '1T', 'AMD Ryzen 7', 'Nvidia GTX1050'],
+             'UWU131HD': ['Dell', 15.6, '8GB', 'DD', '1T', 'AMD Ryzen 3', 'Nvidia GTX1050']}
+
+stock = {'8475HD': [387990,10], 
+         '2175HD': [327990,4], 
+         'JjfFHD': [424990,1],
+         'fgdxFHD': [664990,21], 
+         '123FHD': [290890,32], 
+         '342FHD': [444990,7],
+        'GF75HD': [749990,2], 
+        'UWU131HD': [349990,1], 
+        'FS1230HD': [249990,0]}
+
+def stock_marca(marca):
+    total=0
+    for modelo, datos in productos.items():
+        if datos[0].lower()==marca.lower():
+            total += stock[modelo][1]
+    print(f"El total es {total}")
+
+def busqueda_precio(pmin,pmax):
+    disponible= []
+    for modelo, datos in stock.items():
+        precio, cantidad = datos
+        if pmin < precio < pmax and cantidad < 0:
+            marca= productos[modelo][0]
+            disponible.append(f"{marca}----{modelo}")
+    
+    if disponible:
+        disponible.sort()
+        print(f"El modelo y marca de dispositivo que entra en tu rango es: {disponible}")
+    else:
+        print("No hay modelo/marca disponible.")
+
+def actualizar_precio(modelo, precio):
+    if modelo in stock:
+        stock[modelo][0] = precio
+        print(f"El nuevo precio es {precio}")
+        return True
+    else:
+        return False
+
+def menu():
+    while True:
+        try:
+            print("***MENU PRINCIPAL***")
+            print("1-. Stock marca.\n2-. Búsqueda por precio.\n3-. Actualizar precio.\n4-. Salir")
+            opc=int(input("Ingrese la opción deseada: "))
+
+            if opc==1:
+                marca=input("Ingrese la marca que quiere buscar: ").lower()
+                stock_marca(marca)
+            elif opc ==2:
+                while True:
+                    try:
+                        pmin=int(input("Ingrese el precio minimo: "))
+                        pmax=int(input("Ingrese el precio minimo: "))
+                        busqueda_precio(pmin,pmax)
+                        break
+                    except ValueError:
+                        print("Debe ingresar valores enteros!!!")
+                        continue
+            elif opc==3:
+                while True:
+                    modelo=input("Ingrese el modelo que quiere cambiar: ").lower()
+                    try:
+                        nuevo_precio= int(input("Ingrese el precio a actualizar: "))
+                        exito= actualizar_precio(modelo, nuevo_precio)
+                        if exito:
+                            print("Precio actualizado!!!")
+                        else:
+                            print("El modelo no existe!!!")
+                    except ValueError:
+                        print("Debe ingresar valores enteros!!!")
+                        continue
+                    continuar=input("¿Quiere actualizar otro precio de otro Notebook?:\na) Sí \nb)No\n").lower().replace("í","i")
+                    if continuar == "si" or "a":
+                        continue
+                    else:
+                        break
+            elif opc ==4:
+                print("Programa finalizado.")
+                break
+                            
+        except ValueError:
+            print("Error, debe ingresar un numero, intentelo de nuevo.\nDebe ingresar valores enteros!!!")
+            continue
+menu()
